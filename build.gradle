@@ -1,11 +1,13 @@
 plugins {
+    id 'org.springframework.boot' version '2.4.1' // RELEASE 삭제
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
-    id 'org.springframework.boot'version '2.7.1'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 }
 
 group = 'com.test'
-version = '1.0-SNAPSHOT'
+version '1.0.4-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
+sourceCompatibility = 1.8
+
 
 repositories {
     mavenCentral()
@@ -15,17 +17,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    compileOnly 'org.projectlombok:lombok:1.18.30'
+    // lombok
+    implementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
 
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.2'
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 
     // https://mvnrepository.com/artifact/com.h2database/h2
-    implementation 'com.h2database:h2:2.2.224'
+    implementation('com.h2database:h2')
 
 // https://mvnrepository.com/artifact/junit/junit
-    testImplementation 'junit:junit:4.13.2'
+//    testImplementation 'junit:junit:4.13.2'
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+
 }
 
 test {

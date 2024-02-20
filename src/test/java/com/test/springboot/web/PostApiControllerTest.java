@@ -3,6 +3,7 @@ package com.test.springboot.web;
 import com.test.springboot.domain.posts.Posts;
 import com.test.springboot.domain.posts.PostsRepository;
 import com.test.springboot.web.dto.PostsSaveRequestDto;
+import com.test.springboot.web.dto.PostsUpdateRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -60,11 +64,48 @@ class PostApiControllerTest { //@WebMvcTest를 사용하지않음, JPA기능이 
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
 
         //then
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK); //정상적으로 실행됐는지.
-        Assertions.assertThat(responseEntity.getBody()).isGreaterThan(0L); //헤더로 전송해서 body값없음
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK); //정상적으로 실행됐는지.
+        assertThat(responseEntity.getBody()).isGreaterThan(0L); //헤더로 전송해서 body값없음
 
         List<Posts> all = postsRepository.findAll();
-        Assertions.assertThat(all.get(0).getTitle()).isEqualTo(title);
-        Assertions.assertThat(all.get(0).getContent()).isEqualTo(content);
+        assertThat(all.get(0).getTitle()).isEqualTo(title);
+        assertThat(all.get(0).getContent()).isEqualTo(content);
+    }
+
+    @Test
+    public void Posts_수정된다() throws Exception{
+        //given
+        Posts savedPosts = postsRepository.save(Posts.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build());
+
+        Long updateId = savedPosts.getId();
+        String expectedTitle = "title2";
+        String expectedContent = "content2";
+
+        //서버로 전송할 객체
+        PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
+                .title(expectedTitle)
+                .content(expectedContent)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
+        //http객체 생성
+        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
+
+        //when
+        //url, api방식, 객체값, 리턴타입을 던짐
+        //리턴값은 head, body, status가 담김.
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+        List<Posts> all = postsRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
+        assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
     }
 }

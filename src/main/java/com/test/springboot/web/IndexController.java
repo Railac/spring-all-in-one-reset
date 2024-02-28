@@ -1,5 +1,6 @@
 package com.test.springboot.web;
 
+import com.test.springboot.config.auth.LoginUser;
 import com.test.springboot.config.auth.dto.SessionUser;
 import com.test.springboot.service.posts.PostsService;
 import com.test.springboot.web.dto.PostsResponseDto;
@@ -19,11 +20,10 @@ public class IndexController { //view 이동 역학을 하는 Controller
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model, @LoginUser SessionUser user){
         model.addAttribute("posts", postsService.findAllDesc()); //서버 템플릿 엔진에서 사용할 수 있는 객체를 저장
 
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-
+        //SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if( user != null){
             model.addAttribute("userName", user.getName());

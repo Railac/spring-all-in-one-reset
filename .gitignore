@@ -39,6 +39,7 @@ out/
 #### oauth ####
 application-oauth.properties
 
+.class
 *.class
 
 

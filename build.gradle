@@ -39,6 +39,9 @@ dependencies {
 
     testImplementation('org.springframework.security:spring-security-test')
 
+    //mariaDB
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+
 // https://mvnrepository.com/artifact/junit/junit
 //    testImplementation 'junit:junit:4.13.2'
 

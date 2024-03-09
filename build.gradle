@@ -1,0 +1,55 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.1' // RELEASE 삭제
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'com.test'
+version '1.0.4-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
+sourceCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // lombok
+    implementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    implementation('com.h2database:h2')
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mustache
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+
+    //소셜 로그인등 클라이언트 입장에서 소셜 기능 구현 시 필요한 의존성
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
+    //session - jdbc
+    implementation('org.springframework.session:spring-session-jdbc')
+
+    testImplementation('org.springframework.security:spring-security-test')
+
+    //mariaDB
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+
+// https://mvnrepository.com/artifact/junit/junit
+//    testImplementation 'junit:junit:4.13.2'
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+
+}
+
+test {
+    useJUnitPlatform()
+}
